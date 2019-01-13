@@ -1,0 +1,31 @@
+<!--<html lang="en">-->
+<!--<head>-->
+    <!--<meta charset="UTF-8">-->
+    <!--<title>Album List</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--{% if all_albums %}-->
+    <!--<ul>-->
+        <!--{% for album in all_albums %}-->
+        <!--<li><a href="/myapp/{{ album.id }}/">{{ album.album_title }}</a></li>-->
+        <!--{% endfor %}-->
+    <!--</ul>-->
+<!--{% else %}-->
+    <!--<h3>You don't have any albums</h3>-->
+<!--{% endif %}-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+{% if all_albums %}
+    <h3>Here are all my albums:</h3>
+    <ul>
+        {% for album in all_albums %}
+            <li><a href="{% url 'myapp:detail' album.id %}">{{ album.album_title }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <h3>You don't have any albums</h3>
+{% endif %}

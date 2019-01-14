@@ -19,11 +19,3 @@ python manage.py migrate
 
 
 python manage.py shell
-from myapp.models import Album, Song
-Album.objects.all()
-a = Album(artist="Taylor Swift", album_title="Red", genre="Country", album_logo="http://vemco.com/wp-content/uploads/2012/09/image-banner2.jpg")
-a.save()
-
-
-
-http://qpypi.qpython.org/simple/mysqlclient/

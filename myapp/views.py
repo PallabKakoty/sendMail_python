@@ -1,28 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-# from django.template import loader
-from .models import Album
-# from django.http import Http404
-# import csv
-# from django.core.mail import send_mail
-from django.core.mail import EmailMessage
+from .mail_actor import send_mail
 
 
 def index(request):
-	all_albums = Album.objects.all()
-	context = {'all_albums': all_albums}
-	# template = loader.get_template('myapp/index.html')
-	# return HttpResponse(template.render(context, request))
-	return render(request, 'myapp/index.html', context)
-
-
-def detail(request, album_id):
-	# try:
-	# 	album = Album.objects.get(pk=album_id)
-	# except Album.DoesNotExist:
-	# 	raise Http404("Album does not exist")
-	album = get_object_or_404(Album, pk=album_id)
-	return render(request, 'myapp/detail.html', {'album': album})
+	return HttpResponse("To send mail please enter: http://localhost:8000/myapp/upload_csv")
 
 
 def upload_csv(request):
@@ -35,20 +17,28 @@ def upload_csv_process(request):
 		if len(request.FILES) != 0 and str(request.FILES['fileUpload']).endswith(".csv"):
 			csv_email.extend(handle_uploaded_file(request.FILES['fileUpload'], str(request.FILES['fileUpload'])))
 
-		login_data = request.POST.dict()
-		email_to = list(filter(None, str(login_data.get('email')).replace(" ", "").split(","))) + csv_email
-		ccemail = list(filter(None, str(login_data.get('ccemail')).replace(" ", "").split(",")))
-		bccemail = list(filter(None, str(login_data.get('bccemail')).replace(" ", "").split(",")))
-		subject = str(login_data.get('subject'))
-		body = str(login_data.get('body'))
+		form_data = request.POST.dict()
+		email_to = list(filter(None, str(form_data.get('email')).replace(" ", "").split(","))) + csv_email
+		ccemail = list(filter(None, str(form_data.get('ccemail')).replace(" ", "").split(",")))
+		bccemail = list(filter(None, str(form_data.get('bccemail')).replace(" ", "").split(",")))
+		subject = str(form_data.get('subject'))
+		body = str(form_data.get('body'))
+		sendType = str(form_data.get('sendType'))
+		print(sendType)
 
 		if len(email_to) == 0 or not subject or not body:
 			print("Please enter valid details to send email")
 			return HttpResponse("Please enter valid details to send email")
 		else:
-			send_mail(subject, body, email_to, ccemail, bccemail)
-			return HttpResponse("Sending mail...")
-
+			if sendType == 'all':
+				send_mail(subject, body, email_to, ccemail, bccemail)
+				return HttpResponse("Sending mail to all together")
+			elif sendType == 'one':
+				for mail in email_to:
+					send_mail(subject, body, [mail], ccemail, bccemail)
+				return HttpResponse("Sending mail one by one")
+			else:
+				return HttpResponse("Send type not found. Please try again.")
 	return HttpResponse("Failed")
 
 
@@ -63,9 +53,3 @@ def handle_uploaded_file(file, filename):
 	return email_ids
 
 
-def send_mail(subject, body, to_mail, cc_mail, bcc_mail):
-	# html_content = "<strong>Comment tu vas?</strong>"
-	email = EmailMessage(subject, body, "test@test.com", to_mail, bcc_mail, None, None, None, cc_mail, None)
-	email.content_subtype = "html"
-	res = email.send()
-	print("Email Res: " + str(res))

@@ -10,5 +10,3 @@ urlpatterns = [
 	path('upload_csv', views.upload_csv, name='uploadcsv'),
 	path('upload', views.upload_csv_process, name='upload')
 ]
-
-# path('admin/', admin.site.urls),

@@ -134,7 +134,7 @@ STATIC_URL = '/static/'
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'apitestt26@gmail.com'
-EMAIL_HOST_PASSWORD = 'Apitest26@'
+EMAIL_HOST_USER = 'xyz@xyz.com'
+EMAIL_HOST_PASSWORD = 'xyz'
 EMAIL_USE_SSL = True
 

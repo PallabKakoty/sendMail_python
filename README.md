@@ -1,4 +1,8 @@
-# sendMail_python
+# Steps
+  Platform to send email. Option to upload emails through CSV file.
+  Subject, Body, CC, Bcc etc.
+
+
 
 #Configure Mail
 
